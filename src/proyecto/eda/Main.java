@@ -4,6 +4,8 @@
  */
 package proyecto.eda;
 
+import logica.Grafo;
+
 /**
  *
  * @author juanfelipe
@@ -15,6 +17,9 @@ public class Main {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        Grafo grafo = new Grafo(2);
+        grafo.agregarArista(0, 1, 1);
+        grafo.imprimirGrafo();
     }
 
 }
