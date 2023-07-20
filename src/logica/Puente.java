@@ -4,8 +4,8 @@
  */
 package logica;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -36,13 +36,13 @@ public class Puente {
     forman un par. Por ejemplo, los vertices los indices (0, 1)
     forman un par que representa un puente.
      */
-    public List<Integer> encontrarPuentes() {
+    public HashMap<Integer, Integer> encontrarPuentes() {
         id = 0;
         low = new int[grafo.getV()];
         ids = new int[grafo.getV()];
         visitado = new boolean[grafo.getV()];
 
-        List<Integer> puentes = new ArrayList<>();
+        HashMap<Integer, Integer> puentes = new HashMap<>();
 
         // Encuentra los puentes en el grafo en todos los componentes conectados
         for (int i = 0; i < grafo.getV(); i++) {
@@ -55,11 +55,14 @@ public class Puente {
     }
 
     // u representa el vertice actual y v sus vertices vecinos
-    private void dfs(int u, int padre, List<Integer> puentes) {
+    private void dfs(int u, int padre, HashMap<Integer, Integer> puentes) {
         visitado[u] = true;
         low[u] = ids[u] = id++;
 
-        for (Integer v : grafo.getListaAdyacencia().get(u)) {
+        // Se necesita usar Map.Entry para iterar por el hash map que representa la arista
+        for (Map.Entry<Integer, Integer> entry : grafo.getListaAdyacencia().get(u).entrySet()) {
+            int v = entry.getKey();
+
             if (v == padre) {
                 continue;
             }
@@ -68,8 +71,7 @@ public class Puente {
                 dfs(v, u, puentes);
                 low[u] = Math.min(low[u], low[v]);
                 if (ids[u] < low[v]) {
-                    puentes.add(u);
-                    puentes.add(v);
+                    puentes.put(u, v);
                 }
             } else {
                 low[u] = Math.min(low[u], ids[v]);
