@@ -4,7 +4,8 @@
  */
 package logica;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -12,35 +13,28 @@ import java.util.LinkedList;
  */
 public class Grafo {
 
-    public int OrdenDescubrimiento; // Representa el orden en que DFS descubre un vertice
-    public int numeroVertices;
-    public LinkedList[] listaAdyacencia;
+    private final int V;
+    private List<List<Integer>> listaAdyacencia;
 
-    public Grafo(int numeroVertices) {
-        this.numeroVertices = numeroVertices;
-        this.listaAdyacencia = new LinkedList[numeroVertices];
-
-        for (int i = 0; i < numeroVertices; i++) {
-            listaAdyacencia[i] = new LinkedList<>();
+    public Grafo(int V) {
+        this.V = V;
+        this.listaAdyacencia = new ArrayList<>();
+        for (int i = 0; i < V; i++) {
+            listaAdyacencia.add(new ArrayList<>());
         }
     }
 
-    public void agregarArista(int u, int v, int peso) {
-        // Se crean dos aristas simetricas para que el grafo sea no dirigido
-        Arista arista1 = new Arista(u, v, peso);
-        Arista arista2 = new Arista(v, u, peso);
-
-        listaAdyacencia[u].add(arista1);
-        listaAdyacencia[v].add(arista2);
+    public List<List<Integer>> getListaAdyacencia() {
+        return listaAdyacencia;
     }
 
-    public void imprimirGrafo() {
-        for (int i = 0; i < numeroVertices; i++) {
-            LinkedList<Arista> lista = listaAdyacencia[i];
-            for (int j = 0; j < lista.size(); j++) {
-                System.out.println("El vertice " + i + " esta conectado con " + lista.get(j).v + " con un peso de "
-                        + lista.get(j).peso);
-            }
-        }
+    public int getV() {
+        return V;
     }
+
+    public void agregarArista(int u, int v) {
+        listaAdyacencia.get(u).add(v);
+        listaAdyacencia.get(v).add(u);
+    }
+
 }
