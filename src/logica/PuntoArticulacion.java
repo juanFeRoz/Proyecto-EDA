@@ -4,26 +4,28 @@
  */
 package logica;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 /**
  *
  * @author juanfelipe
  */
-public class Puente {
+public class PuntoArticulacion {
 
     // Cuando se hace un DFS se va asignando a cada vertice un id
     // segun el orden en que se visitan
     private int id;
+    // Sirve para determinar si la raiz en el DFS es un punto de articulacion
+    private int numeroAristasIncidentesVerticeRaiz;
+
     // low es un array que guarda el valor del id mas bajo alcanzable
     // desde ese vertice cuando se hace un DFS
     private int[] low, ids;
-    private boolean[] visitado;
+
+    private boolean[] visitado, esPuntoArticulacion;
     private Grafo grafo;
 
-    public Puente(Grafo grafo) {
+    public PuntoArticulacion(Grafo grafo) {
         // Evalua si el grafo es valido
         if (grafo.getListaAdyacencia() == null || grafo.getNumeroVertices() <= 0 || grafo.getListaAdyacencia().size() != grafo.getNumeroVertices()) {
             throw new IllegalArgumentException();
@@ -31,32 +33,31 @@ public class Puente {
         this.grafo = grafo;
     }
 
-    /*
-    Devuelve una lista de pares de vertices que forman un puente.
-    La lista siempre sera de longitud para y los indices (2*i, 2*i+1)
-    forman un par. Por ejemplo, los vertices los indices (0, 1)
-    forman un par que representa un puente.
-     */
-    public List<Integer> encontrarPuentes() {
+    public boolean[] encontrarPuntosArticulacion() {
         id = 0;
         low = new int[grafo.getNumeroVertices()];
         ids = new int[grafo.getNumeroVertices()];
         visitado = new boolean[grafo.getNumeroVertices()];
-
-        List<Integer> puentes = new ArrayList<>();
+        esPuntoArticulacion = new boolean[grafo.getNumeroVertices()];
 
         // Encuentra los puentes en el grafo en todos los componentes conectados
         for (int i = 0; i < grafo.getNumeroVertices(); i++) {
             if (!visitado[i]) {
-                dfs(i, -1, puentes);
+                numeroAristasIncidentesVerticeRaiz = 0;
+                dfs(i, i, -1);
+                esPuntoArticulacion[i] = (numeroAristasIncidentesVerticeRaiz > 1);
             }
         }
 
-        return puentes;
+        return esPuntoArticulacion;
     }
 
     // u representa el vertice actual y v sus vertices vecinos
-    private void dfs(int u, int padre, List<Integer> puentes) {
+    private void dfs(int raiz, int u, int padre) {
+        if (padre == raiz) {
+            numeroAristasIncidentesVerticeRaiz++;
+        }
+
         visitado[u] = true;
         low[u] = ids[u] = id++;
 
@@ -69,16 +70,14 @@ public class Puente {
             }
 
             if (!visitado[v]) {
-                dfs(v, u, puentes);
+                dfs(raiz, v, u);
                 low[u] = Math.min(low[u], low[v]);
-                if (ids[u] < low[v]) {
-                    puentes.add(u);
-                    puentes.add(v);
+                if (ids[u] <= low[v]) {
+                    esPuntoArticulacion[u] = true;
                 }
             } else {
                 low[u] = Math.min(low[u], ids[v]);
             }
         }
     }
-
 }

@@ -14,13 +14,17 @@ import java.util.List;
  */
 public class Grafo {
 
-    private final int V;
+    private final int numeroVertices;
+    private int gasto;
+    private final int presupuesto;
     private final List<HashMap<Integer, Integer>> listaAdyacencia; // En la lista de adyacencia guardo el par vertice-peso en un hashmap
 
-    public Grafo(int V) {
-        this.V = V;
+    public Grafo(int numeroVertices, int presupuesto) {
+        this.gasto = 0;
+        this.numeroVertices = numeroVertices;
+        this.presupuesto = presupuesto;
         this.listaAdyacencia = new ArrayList<>();
-        for (int i = 0; i < V; i++) {
+        for (int i = 0; i < numeroVertices; i++) {
             listaAdyacencia.add(new HashMap<>());
         }
     }
@@ -29,13 +33,20 @@ public class Grafo {
         return listaAdyacencia;
     }
 
-    public int getV() {
-        return V;
+    public int getNumeroVertices() {
+        return numeroVertices;
     }
 
-    public void agregarArista(int u, int v, int w) {
-        listaAdyacencia.get(u).put(v, w);
-        listaAdyacencia.get(v).put(u, w);
+    public void agregarArista(int u, int v, int costo) throws Exception {
+        gasto += costo;
+
+        if (gasto >= presupuesto) {
+            throw new Exception("Se ha excedido el presupuesto");
+        } else {
+            listaAdyacencia.get(u).put(v, costo);
+            listaAdyacencia.get(v).put(u, costo);
+        }
+
     }
 
 }
