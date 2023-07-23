@@ -5,6 +5,7 @@
 package logica;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -14,17 +15,19 @@ import java.util.List;
 public class Grafo {
 
     private final int V;
-    private final List<ArrayList<Integer>> listaAdyacencia;
+    private int gasto;
+    private final List<HashMap<Integer, Integer>> listaAdyacencia; // En la lista de adyacencia guardo el par vertice-peso en un hashmap
 
-    public Grafo(int numeroVertices) {
+    public Grafo(int numeroVertices, int presupuesto) {
+        this.gasto = 0;
         this.V = numeroVertices;
         this.listaAdyacencia = new ArrayList<>();
         for (int i = 0; i < numeroVertices; i++) {
-            listaAdyacencia.add(new ArrayList<>());
+            listaAdyacencia.add(new HashMap<>());
         }
     }
 
-    public List<ArrayList<Integer>> getListaAdyacencia() {
+    public List<HashMap<Integer, Integer>> getListaAdyacencia() {
         return listaAdyacencia;
     }
 
@@ -32,9 +35,16 @@ public class Grafo {
         return V;
     }
 
-    public void agregarArista(int u, int v) {
-        listaAdyacencia.get(u).add(v);
-        listaAdyacencia.get(v).add(u);
+    public int getGasto() {
+        return gasto;
+    }
+
+    public void agregarArista(int u, int v, int costo) {
+
+        gasto += costo;
+        listaAdyacencia.get(u).put(v, costo);
+        listaAdyacencia.get(v).put(u, costo);
+
     }
 
 }

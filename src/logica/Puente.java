@@ -6,6 +6,7 @@ package logica;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -60,7 +61,8 @@ public class Puente {
         low[u] = ids[u] = id++;
 
         // Se necesita usar Map.Entry para iterar por el hash map que representa la arista
-        for (Integer v : grafo.getListaAdyacencia().get(u)) {
+        for (Map.Entry<Integer, Integer> entry : grafo.getListaAdyacencia().get(u).entrySet()) {
+            int v = entry.getKey();
 
             if (v == padre) {
                 continue;

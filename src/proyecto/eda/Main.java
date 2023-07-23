@@ -23,21 +23,20 @@ public class Main {
      */
     public static void main(String[] args) {
 
-        Grafo grafo = new Grafo(9);
+        Grafo grafo = new Grafo(9, 100);
         Ventana ventana = new Ventana();
         DefaultListModel<String> elementosListaPuentes = new DefaultListModel<>();
         JList<String> listaOutputPuentes = new JList<>(elementosListaPuentes);
-
-        grafo.agregarArista(0, 1);
-        grafo.agregarArista(0, 2);
-        grafo.agregarArista(1, 2);
-        grafo.agregarArista(2, 3);
-        grafo.agregarArista(3, 4);
-        grafo.agregarArista(2, 5);
-        grafo.agregarArista(5, 6);
-        grafo.agregarArista(6, 7);
-        grafo.agregarArista(7, 8);
-        grafo.agregarArista(8, 5);
+        grafo.agregarArista(0, 1, 3);
+        grafo.agregarArista(0, 2, 2);
+        grafo.agregarArista(1, 2, 5);
+        grafo.agregarArista(2, 3, 8);
+        grafo.agregarArista(3, 4, 1);
+        grafo.agregarArista(2, 5, 4);
+        grafo.agregarArista(5, 6, 1);
+        grafo.agregarArista(6, 7, 2);
+        grafo.agregarArista(7, 8, 5);
+        grafo.agregarArista(8, 5, 3);
 
         Puente puente = new Puente(grafo);
         List<Integer> puentes = puente.encontrarPuentes();
@@ -60,5 +59,7 @@ public class Main {
         }
 
         ventana.add(listaOutputPuentes);
+
     }
+
 }
