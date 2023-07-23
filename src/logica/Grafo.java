@@ -5,7 +5,6 @@
 package logica;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -14,39 +13,28 @@ import java.util.List;
  */
 public class Grafo {
 
-    private final int numeroVertices;
-    private int gasto;
-    private final int presupuesto;
-    private final List<HashMap<Integer, Integer>> listaAdyacencia; // En la lista de adyacencia guardo el par vertice-peso en un hashmap
+    private final int V;
+    private final List<ArrayList<Integer>> listaAdyacencia;
 
-    public Grafo(int numeroVertices, int presupuesto) {
-        this.gasto = 0;
-        this.numeroVertices = numeroVertices;
-        this.presupuesto = presupuesto;
+    public Grafo(int numeroVertices) {
+        this.V = numeroVertices;
         this.listaAdyacencia = new ArrayList<>();
         for (int i = 0; i < numeroVertices; i++) {
-            listaAdyacencia.add(new HashMap<>());
+            listaAdyacencia.add(new ArrayList<>());
         }
     }
 
-    public List<HashMap<Integer, Integer>> getListaAdyacencia() {
+    public List<ArrayList<Integer>> getListaAdyacencia() {
         return listaAdyacencia;
     }
 
-    public int getNumeroVertices() {
-        return numeroVertices;
+    public int getV() {
+        return V;
     }
 
-    public void agregarArista(int u, int v, int costo) throws Exception {
-        gasto += costo;
-
-        if (gasto >= presupuesto) {
-            throw new Exception("Se ha excedido el presupuesto");
-        } else {
-            listaAdyacencia.get(u).put(v, costo);
-            listaAdyacencia.get(v).put(u, costo);
-        }
-
+    public void agregarArista(int u, int v) {
+        listaAdyacencia.get(u).add(v);
+        listaAdyacencia.get(v).add(u);
     }
 
 }

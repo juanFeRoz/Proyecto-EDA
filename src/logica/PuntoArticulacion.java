@@ -4,8 +4,6 @@
  */
 package logica;
 
-import java.util.Map;
-
 /**
  *
  * @author juanfelipe
@@ -27,7 +25,7 @@ public class PuntoArticulacion {
 
     public PuntoArticulacion(Grafo grafo) {
         // Evalua si el grafo es valido
-        if (grafo.getListaAdyacencia() == null || grafo.getNumeroVertices() <= 0 || grafo.getListaAdyacencia().size() != grafo.getNumeroVertices()) {
+        if (grafo.getListaAdyacencia() == null || grafo.getV() <= 0 || grafo.getListaAdyacencia().size() != grafo.getV()) {
             throw new IllegalArgumentException();
         }
         this.grafo = grafo;
@@ -35,13 +33,13 @@ public class PuntoArticulacion {
 
     public boolean[] encontrarPuntosArticulacion() {
         id = 0;
-        low = new int[grafo.getNumeroVertices()];
-        ids = new int[grafo.getNumeroVertices()];
-        visitado = new boolean[grafo.getNumeroVertices()];
-        esPuntoArticulacion = new boolean[grafo.getNumeroVertices()];
+        low = new int[grafo.getV()];
+        ids = new int[grafo.getV()];
+        visitado = new boolean[grafo.getV()];
+        esPuntoArticulacion = new boolean[grafo.getV()];
 
         // Encuentra los puentes en el grafo en todos los componentes conectados
-        for (int i = 0; i < grafo.getNumeroVertices(); i++) {
+        for (int i = 0; i < grafo.getV(); i++) {
             if (!visitado[i]) {
                 numeroAristasIncidentesVerticeRaiz = 0;
                 dfs(i, i, -1);
@@ -62,8 +60,7 @@ public class PuntoArticulacion {
         low[u] = ids[u] = id++;
 
         // Se necesita usar Map.Entry para iterar por el hash map que representa la arista
-        for (Map.Entry<Integer, Integer> entry : grafo.getListaAdyacencia().get(u).entrySet()) {
-            int v = entry.getKey();
+        for (Integer v : grafo.getListaAdyacencia().get(u)) {
 
             if (v == padre) {
                 continue;
