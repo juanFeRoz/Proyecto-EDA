@@ -4,13 +4,12 @@
  */
 package proyecto.eda;
 
+import java.io.IOException;
 import java.util.List;
-import javax.swing.DefaultListModel;
-import javax.swing.JList;
+import static logica.GeneradorGrafo.leerArchivoTxt;
 import logica.Grafo;
 import logica.Puente;
 import logica.PuntoArticulacion;
-import presentacion.Ventana;
 
 /**
  *
@@ -23,43 +22,59 @@ public class Main {
      */
     public static void main(String[] args) {
 
-        Grafo grafo = new Grafo(9, 100);
-        Ventana ventana = new Ventana();
-        DefaultListModel<String> elementosListaPuentes = new DefaultListModel<>();
-        JList<String> listaOutputPuentes = new JList<>(elementosListaPuentes);
-        grafo.agregarArista(0, 1, 3);
-        grafo.agregarArista(0, 2, 2);
-        grafo.agregarArista(1, 2, 5);
-        grafo.agregarArista(2, 3, 8);
-        grafo.agregarArista(3, 4, 1);
-        grafo.agregarArista(2, 5, 4);
-        grafo.agregarArista(5, 6, 1);
-        grafo.agregarArista(6, 7, 2);
-        grafo.agregarArista(7, 8, 5);
-        grafo.agregarArista(8, 5, 3);
+        try {
+            // Generar el grafo de topología de anillo a partir del archivo anillo.txt
+            Grafo grafoAnillo = leerArchivoTxt("anillo.txt");
 
-        Puente puente = new Puente(grafo);
-        List<Integer> puentes = puente.encontrarPuentes();
+            // Encontrar los puentes y puntos de articulacion del grafo tipo anillo
+            Puente encontrarPuentesGrafoAnillo = new Puente(grafoAnillo);
+            List<Integer> puentesGrafoAnillo = encontrarPuentesGrafoAnillo.encontrarPuentes();
 
-        PuntoArticulacion puntoArticulacion = new PuntoArticulacion(grafo);
-        boolean[] puntosArticulacion = puntoArticulacion.encontrarPuntosArticulacion();
+            PuntoArticulacion encontrarPuntosArticulacionGrafoAnillo = new PuntoArticulacion(grafoAnillo);
+            boolean[] puntosArticulacionGrafoAnillo = encontrarPuntosArticulacionGrafoAnillo.encontrarPuntosArticulacion();
 
-        for (int i = 0; i < puentes.size() / 2; i++) {
-            int u = puentes.get(2 * i);
-            int v = puentes.get(2 * i + 1);
-            String output = String.format("Puente entre vertices %d y %d\n", u, v);
-            elementosListaPuentes.addElement(output);
-        }
+            System.out.println("Vulnerabilidades Grafo Anillo: ");
 
-        for (int i = 0; i < puntosArticulacion.length; i++) {
-            if (puntosArticulacion[i]) {
-                String output = String.format("El vertice %d es un punto de articulacion\n", i);
-                elementosListaPuentes.addElement(output);
+            for (int i = 0; i < puentesGrafoAnillo.size() / 2; i++) {
+                int u = puentesGrafoAnillo.get(2 * i);
+                int v = puentesGrafoAnillo.get(2 * i + 1);
+                System.out.printf("Puente entre vertices %d y %d\n", u, v);
             }
+
+            for (int i = 0; i < puntosArticulacionGrafoAnillo.length; i++) {
+                if (puntosArticulacionGrafoAnillo[i]) {
+                    System.out.printf("El vertice %d es un punto de articulacion\n", i);
+                }
+            }
+
+            // Generar el grafo de topología de estrella a partir del archivo estrella.txt
+            Grafo grafoEstrella = leerArchivoTxt("estrella.txt");
+
+            // Encontrar los puentes y puntos de articulacion del grafo tipo estrella
+            Puente encontrarPuentesGrafoEstrella = new Puente(grafoEstrella);
+            List<Integer> puentesGrafoEstrella = encontrarPuentesGrafoEstrella.encontrarPuentes();
+
+            PuntoArticulacion encontrarPuntosArticulacionGrafoEstrella = new PuntoArticulacion(grafoEstrella);
+            boolean[] puntosArticulacionGrafoEstrella = encontrarPuntosArticulacionGrafoEstrella.encontrarPuntosArticulacion();
+
+            System.out.println("");
+            System.out.println("Vulnerabilidades Grafo Estrella: ");
+
+            for (int i = 0; i < puentesGrafoEstrella.size() / 2; i++) {
+                int u = puentesGrafoEstrella.get(2 * i);
+                int v = puentesGrafoEstrella.get(2 * i + 1);
+                System.out.printf("Puente entre vertices %d y %d\n", u, v);
+            }
+
+            for (int i = 0; i < puntosArticulacionGrafoEstrella.length; i++) {
+                if (puntosArticulacionGrafoEstrella[i]) {
+                    System.out.printf("El vertice %d es un punto de articulacion\n", i);
+                }
+            }
+
+        } catch (IOException e) {
+            System.out.println("Error al leer el archivo: " + e.getMessage());
         }
-
-        ventana.add(listaOutputPuentes);
-
     }
 
 }
